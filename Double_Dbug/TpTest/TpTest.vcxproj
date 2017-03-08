@@ -188,6 +188,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Release|x64'">
     <DebuggerFlavor>DbgengKernelDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Win7 Debug|Win32'">
+    <ClCompile>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <Inf Include="TpTest.inf" />
   </ItemGroup>
@@ -196,13 +201,13 @@
     <FilesToPackage Include="@(Inf->'%(CopyOutput)')" Condition="'@(Inf)'!=''" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Administrator\Desktop\TpTest\func.h" />
-    <ClInclude Include="C:\Users\Administrator\Desktop\TpTest\LDasm.h" />
-    <ClInclude Include="C:\Users\Administrator\Desktop\TpTest\myhead.h" />
-    <ClInclude Include="C:\Users\Administrator\Desktop\TpTest\searchglobal.h" />
+    <ClInclude Include="func.h" />
+    <ClInclude Include="LDasm.h" />
+    <ClInclude Include="myhead.h" />
+    <ClInclude Include="searchglobal.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\Administrator\Desktop\TpTest\TpTest.c" />
+    <ClCompile Include="TpTest.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

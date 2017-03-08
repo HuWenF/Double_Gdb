@@ -21,7 +21,6 @@ VOID DriverUnload(IN PDRIVER_OBJECT pDriverObject)
 	{
 		*KdDebuggerEnabled = 1;
 	}
-
 	//还原KdDebuggerNotPresent   Debug 模式为False
 	if (*KdDebuggerNotPresent)
 	{
@@ -35,7 +34,7 @@ VOID DriverUnload(IN PDRIVER_OBJECT pDriverObject)
 	}
 
 	DbgPrint("卸载流程执行成功!");
-
+	
 }
 
 
