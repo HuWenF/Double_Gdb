@@ -2,6 +2,18 @@
 #include "codemsg.h"
 
 
+extern "C" PVOID  KdEnteredDebugger;
+PVOID      GetKdEnteredDebuggerAddr()
+{
+	return KdEnteredDebugger;
+}
+
+
+//获得KdEnteredDebugger 的地址
+DWORD32 *EnterAddr = NULL;
+
+
+
 //卸载驱动
 VOID DriverUnload(IN PDRIVER_OBJECT pDriverObject)
 {
@@ -15,16 +27,19 @@ VOID DriverUnload(IN PDRIVER_OBJECT pDriverObject)
 	{
 		*KdDebuggerNotPresent = 0; //还原为Debug模式
 	}
+	//还原KdEnteredDebugger
 	
+	if (!(*EnterAddr))
+	{
+		*EnterAddr = 1; //还原为Debug模式
+	}
+
 	DbgPrint("卸载流程执行成功!");
 
 }
 
-extern "C" ULONG64  KdEnteredDebugger;
-ULONG64        GetKdEnteredDebuggerAddr()
-{
-	return KdEnteredDebugger;
-}
+
+
 
 
 
@@ -33,27 +48,32 @@ extern "C" NTSTATUS DriverEntry(IN PDRIVER_OBJECT pDriverObject, IN PUNICODE_STR
 {
 	//驱动通讯例程填写卸载驱动
 	pDriverObject->DriverUnload = DriverUnload;
-	ULONG64 EnterAddr = NULL;
-	//获得KdEnteredDebugger 的地址
-	EnterAddr = GetKdEnteredDebuggerAddr();
+	
+	//1获取KdEnteredDebugger
+	EnterAddr = (DWORD32 *)GetKdEnteredDebuggerAddr();
 	//调用API打印
-	DbgPrint("EnterAddr :%p", EnterAddr);
-
+	DbgPrint("Value :%x\n", (int)(*EnterAddr));
+	//直接修改KdEnteredDebugger
+	if (*EnterAddr)
+	{
+		*EnterAddr = 0;
+	}
+	 
 	
 	//开始修改Dbg标记位置
-	//修改KdDebuggerEnabled 标志为False
+	//2修改KdDebuggerEnabled 标志为False
 	if (*KdDebuggerEnabled)
 	{
 		*KdDebuggerEnabled = 0;//修改为普通模式
 	}
-	//验证KdDebuggerNotPresent   Debug 为False
+	//3验证KdDebuggerNotPresent   Debug 为False
 	if (!(*KdDebuggerNotPresent))
 	{
 		*KdDebuggerNotPresent = 1; //修改为普通模式
 	}
 	
-
-
+	
+		
 
 	
 
