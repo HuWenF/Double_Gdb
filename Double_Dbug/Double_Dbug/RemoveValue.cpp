@@ -18,6 +18,9 @@ NTSTATUS MoveGlobleValue()
 
 
 
+
+
+
 }
 
 
